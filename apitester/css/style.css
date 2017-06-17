@@ -1,0 +1,63 @@
+*,
+*:before,
+*:after {box-sizing: border-box;}
+
+body{
+  margin:0;
+}
+
+.container{
+  padding: 20px;
+}
+
+.bgimage{
+  background-
+  padding:0;
+  background: url("http://maps.googleapis.com/maps/api/streetview?size=600x300&location=60.3818091,5.3299764&heading=240.78&pitch=20") no-repeat center center;
+  background-position:absolute;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: absolute;
+  width:100vw;
+  min-height:100vh;
+}
+
+.wikilinks{
+  background-color: #FFF;
+  min-height: 200px;
+  border: 3px solid #ccc;
+  border-radius: 3px;
+  padding:0 10px;
+}
+
+.new-note-form {
+    margin-bottom: 15px;
+}
+.new-note-content {
+    width:100%;
+    display: block;
+    font-size: 1.3em;
+}
+
+.notes {
+    list-style-type: none;
+    margin:0;
+    padding: 0;
+}
+.note {
+    display: inline-block;
+    width: 250px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    padding:10px;
+    list-style-type: none;
+    background-color: #cde;
+}
+
+.note-date {
+    font-size:0.7em;
+    margin-bottom: 10px;
+    display: block;
+}

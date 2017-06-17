@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Catclicker</title>
+  </head>
+  <body>
+    <h1>Cats:</h1>
+    <div id="catList" class="catlist">
+
+    </div>
+    <div id="cat" class="cat">
+      <h2>Selected cat:</h2>
+      <h2 id="catName"></h2>
+      <img id="catImg" src="" alt="cat picture">
+      <p>Results: <b id="catClicks">0</b></p>
+    </div>
+    <button type="button" id="btn-editCat">Admin</button>
+    <div id="form-editCat" style="display:none;">
+      <input type="text" id="editcat-name" value=""><br>
+      <input type="text" id="editcat-img" value=""><br>
+      <input type="text" id="editcat-clicks" value=""><br>
+      <button type="button" id="editcat-submit">Submit changes</button>
+    </div>
+  </body>
+  <script type="text/javascript" src="static/js/catclicker.js"></script>
+</html>

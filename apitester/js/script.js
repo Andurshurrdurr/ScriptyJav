@@ -33,7 +33,7 @@ function loadData() {
 
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
-      'api-key': "1e4c2f6c5bb64b708f808963b73191f1",
+      'api-key': "",
       'q': street + " " + city
     });
     // $.getJSON(url, function( data ){
@@ -74,7 +74,7 @@ function loadData() {
     // Wikipedia AJAX!
     var wurl = "https://en.wikipedasdasdasdasdfia.org/w/api.php?action=opensearch&search="+ city +"&format=json"
 
-    var wikitimeout = 
+    var wikitimeout =
     $.ajax({
         url: wurl,
         dataType: "jsonp",

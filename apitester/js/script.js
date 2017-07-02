@@ -33,7 +33,7 @@ function loadData() {
 
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
-      'api-key': "",
+      'api-key': "1e4c2f6c5bb64b708f808963b73191f1",
       'q': street + " " + city
     });
     // $.getJSON(url, function( data ){

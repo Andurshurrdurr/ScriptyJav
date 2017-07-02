@@ -76,12 +76,35 @@ Directions
 		Options: travelMode, waypoints, transit_routing_preferences, optimizeWaypoints
 		see: https://developers.google.com/maps/documentation/javascript/directions
 Limits
-	https://developers.google.com/maps/documentation/javascript/directions#UsageLimits</data></node><node title="Roads API"><data>Avaliable only as a webservice
+	https://developers.google.com/maps/documentation/javascript/directions#UsageLimits
+Other useful apis
+	Nearby search
+		Gets list of nearby places from center and radius
+	Text search
+		Search without specified location by using text query
+	Radar
+		Like nearby search, except more places and less specified information
+Timezone api
+	maps/api/timezone/json?location=lat,lng&amp;timestamp=1jan1970timesince&amp;key=87ut6958069032495
+Geolocating
+	Useful for machines which doesnt have geolocation built in
+	Websevice to pass info from celltowers/wifinodes to get location</data></node><node title="Roads API"><data>Avaliable only as a webservice
 Snap to roads
 	Takes up to 100 points and snaps the points to a road
 	args: Interpolate returns smooths out the returned points
 Speed limits
-	Rakes path(list og latlngs) or placeIds and returns speed limit + snapped points</data></node><node title="Project req"><data>Interface
+	Rakes path(list og latlngs) or placeIds and returns speed limit + snapped points</data></node><node title="Other API features"><data>API Use
+	See console to monitor api use
+	QPD = Queries per day
+	QPS = Queries per sec
+	In console you may limit the api use
+	There is a premium key:
+		You have to have premium on closed sites
+		You must have premium on paid services
+JS documentation on
+	&lt;b&gt;https://developers.google.com/maps/documentation/javascript/tutorial&lt;/b&gt;
+List of various apis:
+	...</data></node><node title="Project req"><data>Interface
 	Responsive design, works across platforms
 Functionality
 	Geocoding and filters
@@ -105,4 +128,9 @@ Documentation
 	Code is good -&gt; See JS styleguide
 Plan
 	devenv
-		NodeJS + gulp</data></node></tree>
+		NodeJS + gulp
+		atom
+	Features
+		MVVM with Knockout JS
+		M&#252;nchen as the city
+		Use of the apis</data></node></tree>

@@ -1,59 +1,102 @@
+// Here we add our locations
+var locations = [
+  {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
+  {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
+  {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
+  {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
+  {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
+  {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
+];
 
-var initialdata = [
-  {
-        name:"Tabby2",
-        img: "img/cat1.jpg",
-        nicks: [{name:"Goldylocks"},
-                {name:"Upking"},
-                {name: "Teddytalks"}]
-  },
-  {
-        name:"Shooby",
-        img: "img/cat2.jpg",
-        nicks: [{name:"CaptainShoob"},
-                {name:"Candymeow"},
-                {name:"StarPurr"}]
-  }
-]
+// Together with global variables
+var map;
 
-var Cat = function(data){
-  this.clickCount = ko.observable(0);
-  this.name = ko.observable(data.name);
-  this.imgSrc = ko.observable(data.img);
-  this.level = ko.computed(function(){
-    if (this.clickCount() > 30){
-      return "MEGACAT!!!";
-    } else if (this.clickCount() > 15){
-      return "Intermediate";
-    } else {
-      return "Baby";
-    }
-  }, this)
-
-  this.nicks = ko.observableArray(data.nicks)
+// Helperfunction for creating text for the infowindow
+var makeContent = function(object){
 
 }
 
+// For creating location objects
+var Location = function(location) {
+  // First we set the self variable
+  var self = this;
+  // Next we initiate all the initial attributes
+  self.title = location.title;
+  console.log("Location object initiated for " + location)
+  self.lat = location.location.lat;
+  self.lng = location.location.lng;
 
-var ViewModel = function() {
-  self = this;
+  // And sets some empty values we will fill with API requests
+  self.URL = "";
+  self.street = "";
+  self.city = "";
+  self.phone = "";
 
-  this.catList = ko.observableArray([]);
+  // And an observable to toggle the location visible
+  self.visible = ko.observable(true);
 
-  initialdata.forEach(function(catItem){
-    self.catList.push(new Cat(catItem));
+  // And we create a webservice url from the data
+
+  // Next we do the AJAX request
+
+  // Then make the infowindow and marker for google maps
+  self.infoWindow = new google.maps.InfoWindow({content: makeContent(self)});
+
+  self.marker = new google.maps.Marker({
+    map: map,
+    title: self.title,
+    position: new google.maps.LatLng(self.lat, self.lng),
+    animation: google.maps.Animation.DROP,
+  })
+
+  // And we create the operators for showing marker
+  self.markerVisible = ko.computed(function() {
+    return self.visible() ? self.marker.setMap(map) : self.marker.setMap(null);
   });
 
-  self.currentCat = ko.observable( this.catList()[0] );
+  // And finally listener for when user clicks the marker
+  self.marker.addListener('click', function(){
+    self.infoWindow.setContent(self.contentString);
+    self.infoWindow.open(map, self)
+  });
+};
 
-  this.incrementCounter = function(){
-    this.clickCount(this.clickCount()+1);
-  };
+// This is our viewmodel
+function ViewModel() {
+  // First we set the self variable
+  var self = this;
+  // Then we initiate a couple of attributes
+  self.searchInput = ko.observable("");
 
-  self.setcurrentCat = function(){
-    console.log("changing cat..")
-    self.currentCat(this);
-  }
+  self.locationList = ko.observableArray([]);
+
+  // Next we get the map object
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 40.7413549, lng: -73.9980244},
+    zoom: 13,
+    styles: mapstyles,
+    mapTypeControl: false
+  });
+
+  // Forsquare API
+
+  // initialize location markers and push them to the locationlist obs array
+  locations.forEach(function(location){
+		self.locationList.push(new Location(location));
+	});
+
+  // Search filter
+
+  // Getting the map element in html
+
 }
 
-ko.applyBindings(new ViewModel());
+// Callback for loading the google api
+function initApp() {
+  ko.applyBindings(new ViewModel());
+}
+
+// This is an errorhandler called if loading the google api fails
+function errorHandler() {
+  alert("Google maps has failed to load.")
+}

@@ -42,7 +42,7 @@ hr {
   right: 0px;
 }
 
-.options-box {
+.side-panel {
   background: #fff;
   border: 1px solid #999;
   border-radius: 3px;
@@ -51,6 +51,10 @@ hr {
   padding: 10px 10px 30px 10px;
   text-align: left;
   width: 340px;
+}
+
+.options{
+  height:30vh;
 }
 
 #pano {

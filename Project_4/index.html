@@ -19,7 +19,7 @@
           <table>
             <tbody data-bind="foreach: filteredLocations">
                 <tr>
-                    <td data-bind="text: title"></td>
+                    <td data-bind="text: title, click: locationClicked"></td>
                 </tr>
             </tbody>
           </table>

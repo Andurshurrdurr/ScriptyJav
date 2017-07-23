@@ -8,21 +8,31 @@ var locations = [
   {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
 ];
 
-// Together with global variables
+// And map as a global variable
 var map;
 
 // Helperfunction for creating text for the infowindow
-var makeContent = function(object){
-  return "Title: " + object.title
+var makeContent = function(location){
+  return "Title: " + location.title
 }
 
-// For creating location objects
-var Location = function(location) {
+// Function called when location is clicked
+function locationClicked (location) {
+  // First we display the infowindow
+  location.displayInfoWindow()
+  // And bounce the marker
+  location.marker.setAnimation(google.maps.Animation.BOUNCE);
+  setTimeout( function() {
+    location.marker.setAnimation(null);
+  },700);
+}
+
+// Out location class
+var Location = function(location, loclist) {
   // First we set the self variable
   var self = this;
   // Next we initiate all the initial attributes
   self.title = location.title;
-  console.log("Location object initiated for " + location)
   self.lat = location.location.lat;
   self.lng = location.location.lng;
 
@@ -54,16 +64,22 @@ var Location = function(location) {
     return self.visible() ? self.marker.setMap(map) : self.marker.setMap(null);
   });
 
+  // Function for clearing infowindows
+  self.displayInfoWindow = function (){
+    loclist().forEach(function(location){
+      location.infoWindow.close();
+    });
+    self.infoWindow.open(map, self.marker);
+  }
+
   // And finally listener for when user clicks the marker
   self.marker.addListener('click', function(){
-    console.log("marker with title " + self.title + "Clicked!");
-    // self.infoWindow.setContent("info!");
-    self.infoWindow.open(map, this);
+    locationClicked(self);
   });
 };
 
 // This is our viewmodel
-function ViewModel() {
+var ViewModel = function () {
   // First we set the self variable
   var self = this;
   // Then we initiate a couple of attributes
@@ -83,7 +99,7 @@ function ViewModel() {
 
   // initialize location markers and push them to the locationlist obs array
   locations.forEach(function(location){
-		self.locationList.push(new Location(location));
+		self.locationList.push(new Location(location, self.locationList));
 	});
 
   // Filter: The function will return array of locations filtered by searchInput.

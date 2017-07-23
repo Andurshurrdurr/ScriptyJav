@@ -10,6 +10,7 @@ Instructions on getting a running developmentenvironment on your local machine
 
 #### Demo
  See the running demo on gh-pages:
+https://andurshurrdurr.github.io/ScriptyJav/
 
 ### Notes on development
 *The general idea*

@@ -8,11 +8,21 @@
       <div class="side-panel">
         <div class="options">
           <h1>Input</h1>
+          <p>Filter list:</p>
+          <input data-bind="textInput: searchInput">
+          </form>
         </div>
         <hr>
         <div class="results">
           <h1>Results</h1>
-          eyah
+          <!-- Foreach feature here -->
+          <table>
+            <tbody data-bind="foreach: filteredLocations">
+                <tr>
+                    <td data-bind="text: title"></td>
+                </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div id="map"></div>

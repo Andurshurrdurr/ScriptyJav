@@ -13,7 +13,7 @@ var map;
 
 // Helperfunction for creating text for the infowindow
 var makeContent = function(object){
-
+  return "Title: " + object.title
 }
 
 // For creating location objects
@@ -35,7 +35,7 @@ var Location = function(location) {
   // And an observable to toggle the location visible
   self.visible = ko.observable(true);
 
-  // And we create a webservice url from the data
+  // And we create a webservice url from the data, which we will request
 
   // Next we do the AJAX request
 
@@ -56,8 +56,9 @@ var Location = function(location) {
 
   // And finally listener for when user clicks the marker
   self.marker.addListener('click', function(){
-    self.infoWindow.setContent(self.contentString);
-    self.infoWindow.open(map, self)
+    console.log("marker with title " + self.title + "Clicked!");
+    // self.infoWindow.setContent("info!");
+    self.infoWindow.open(map, this);
   });
 };
 
@@ -85,10 +86,22 @@ function ViewModel() {
 		self.locationList.push(new Location(location));
 	});
 
-  // Search filter
-
+  // Filter: The function will return array of locations filtered by searchInput.
+  // Knockout doesnt give documentation on their utilfunctions, but I found this
+  // guide online:
+  // http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+  self.filteredLocations = ko.computed( function() {
+    // First we make our searchinput lowercase
+    var filter = self.searchInput().toLowerCase();
+    // Next we use the ko.utils.arrayFilter function and return the result
+    return ko.utils.arrayFilter(self.locationList(), function(location) {
+    		var string = location.title.toLowerCase();
+    		var result = (string.search(filter) >= 0);
+    		location.visible(result);
+    		return result;
+			});
+  }, self);
   // Getting the map element in html
-
 }
 
 // Callback for loading the google api

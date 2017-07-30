@@ -8,7 +8,7 @@ var locations = [
   {id: 6, title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
 ];
 
-// And map as a global variable
+// Map and polygon as global variables
 var map;
 // For Foursquare API
 var foursquareClientID = "BVZ2KL4UKK0IB1CGRXGTISJYDABEUOM4L22NAD3254UCRWRG";
@@ -19,14 +19,14 @@ var modal = document.getElementById('myModal');
 // Helperfunction for creating text for the infowindow
 var makeContent = function(location){
   // First we format the content to html
-  console.log("making content for " + location.title)
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
   '<div class="infoContent">' + location.website + '</div>' +
   '<div class="infoContent">' + location.address + '</div>' +
-  '<div class="infoContent">' + location.phone + '</div></div>'
-  console.log("contents are " + content)
-  return content
+  '<div class="infoContent">' + location.phone + '</div></div>';
+  // And return the content
+  return content;
 }
+
 
 // Function called when location is clicked
 function locationClicked (location) {
@@ -121,7 +121,9 @@ var Location = function(location, loclist) {
   });
 };
 
-// This is our viewmodel
+// This is our viewmodel--------------------------------------------------------
+
+
 var ViewModel = function () {
   // First we set the self variable
   var self = this;
@@ -129,7 +131,6 @@ var ViewModel = function () {
   self.searchInput = ko.observable("");
   self.locationList = ko.observableArray([]);
   self.currentThread = ko.observable(0);
-
   // Next we get the map object
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 40.7413549, lng: -73.9980244},
@@ -138,16 +139,35 @@ var ViewModel = function () {
     mapTypeControl: false
   });
 
-  // Forsquare API
+
 
   // initialize location markers and push them to the locationlist obs array
   locations.forEach(function(location){
 		self.locationList.push(new Location(location, self.locationList));
 	});
 
+  self.toggleDrawing = function(){
+    console.log("Drawing toggled!")
+    if (drawingManager.map) {
+      drawingManager.setMap(null);
+      // Shorthand for loop to set locations visible
+      for (var i in drawingManager.searchLocs){
+        drawingManager.searchLocs[i].visible(true);
+      }
+      // In case the user drew anything, get rid of the polygon
+      if (polygon !== null) {
+        polygon.setMap(null);
+      }
+    } else {
+      drawingManager.setMap(map);
+      console.log("setting locs" + self.filteredLocations());
+      drawingManager.searchLocs = self.filteredLocations();
+    }
+  };
+
   // Filter: The function will return array of locations filtered by searchInput.
   // Knockout doesnt give documentation on their utilfunctions, but I found this
-  // guide online:
+  // guide:
   // http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
   self.filteredLocations = ko.computed(function() {
     // First we make our searchinput lowercase
@@ -156,11 +176,14 @@ var ViewModel = function () {
     return ko.utils.arrayFilter(self.locationList(), function(location) {
     		var title = location.title.toLowerCase();
     		var result = (title.search(filter) >= 0);
+        if (location.visible() === false){
+          result = false;
+        }
     		location.visible(result);
     		return result;
 			});
   }, self);
-  // Getting the map element in html
+  // setTimeout function so the google maps libs can load before we access them
 }
 
 // Callback for loading the google api

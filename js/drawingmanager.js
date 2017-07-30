@@ -41,9 +41,9 @@ function searchWithinPolygon(polygon, locations) {
   for (var i = 0; i < locations.length; i++) {
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lng)
     if (google.maps.geometry.poly.containsLocation(position, polygon)) {
-      locations[i].visible(true);
+      locations[i].inPolygon(true);
     } else {
-      locations[i].visible(false);
+      locations[i].inPolygon(false);
     }
   }
 }

@@ -57,6 +57,7 @@ var Location = function(location, loclist) {
 
   // And observable to toggle the location and dropdown visible
   self.visible = ko.observable(true);
+  self.inPolygon = ko.observable(true);
   self.showDropdown = ko.observable(false);
 
   // And we create a webservice url from the data, which we will request
@@ -139,8 +140,6 @@ var ViewModel = function () {
     mapTypeControl: false
   });
 
-
-
   // initialize location markers and push them to the locationlist obs array
   locations.forEach(function(location){
 		self.locationList.push(new Location(location, self.locationList));
@@ -152,7 +151,7 @@ var ViewModel = function () {
       drawingManager.setMap(null);
       // Shorthand for loop to set locations visible
       for (var i in drawingManager.searchLocs){
-        drawingManager.searchLocs[i].visible(true);
+        drawingManager.searchLocs[i].inPolygon(true);
       }
       // In case the user drew anything, get rid of the polygon
       if (polygon !== null) {
@@ -174,9 +173,10 @@ var ViewModel = function () {
     var filter = self.searchInput().toLowerCase();
     // Next we use the ko.utils.arrayFilter function and return the result
     return ko.utils.arrayFilter(self.locationList(), function(location) {
+        // if drawingmanager enabled we check if visible is false, else its inactive
     		var title = location.title.toLowerCase();
     		var result = (title.search(filter) >= 0);
-        if (location.visible() === false){
+        if (location.inPolygon() === false){
           result = false;
         }
     		location.visible(result);

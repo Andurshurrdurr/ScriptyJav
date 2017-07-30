@@ -31,7 +31,7 @@ var makeContent = function(location){
 // Function called when location is clicked
 function locationClicked (location) {
   // First we display the infowindow
-  location.displayInfoWindow()
+  location.displayInfo()
   thread_id = location.id;
   // And bounce the marker
   location.marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -51,12 +51,13 @@ var Location = function(location, loclist) {
   self.lng = location.location.lng;
 
   // And sets some empty values we will fill with API requests
-  self.website = "";
-  self.address = "";
-  self.phone = "";
+  self.website = "www.google.com";
+  self.address = "Villaveien";
+  self.phone = "1289378";
 
-  // And an observable to toggle the location visible
+  // And observable to toggle the location and dropdown visible
   self.visible = ko.observable(true);
+  self.showDropdown = ko.observable(false);
 
   // And we create a webservice url from the data, which we will request
   var foursquareURL = "https://api.foursquare.com/v2/venues/search?ll=" +
@@ -77,7 +78,7 @@ var Location = function(location, loclist) {
   //       // Do a nice formatting using if statement shorthand
   //       console.log("accessed the foursquareURL")
   //       self.website = response.url ? response.url : "No website";
-  //       self.street = response.formattedAddress ? response.formattedAddress[0] : "No formatted address";
+  //       self.address = response.formattedAddress ? response.formattedAddress[0] : "No formatted address";
   //       self.phone = response.contact.formattedPhone ? response.contact.formattedPhone : "No phone number";
   //     } else {}
   //   })
@@ -105,11 +106,13 @@ var Location = function(location, loclist) {
   });
 
   // Function for clearing infowindows
-  self.displayInfoWindow = function (){
+  self.displayInfo = function (){
     loclist().forEach(function(location){
       location.infoWindow.close();
+      location.showDropdown(false);
     });
     self.infoWindow.open(map, self.marker);
+    self.showDropdown(true);
   }
 
   // And finally listener for when user clicks the marker

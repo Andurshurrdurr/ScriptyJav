@@ -15,15 +15,28 @@
           <input data-bind="textInput: searchInput">
           </form>
         </div>
+        <button data-bind="click: $root.toggleDrawing">Draw</button>
         <button id="myBtn">Discuss the site</button>
         <hr>
         <div class="results">
           <h1>Results</h1>
-          <!-- Foreach feature here -->
           <table>
+            <!-- Foreach feature here -->
             <tbody data-bind="foreach: filteredLocations">
                 <tr>
                     <td data-bind="text: title, click: locationClicked"></td>
+                </tr>
+                <!-- If clicked, a dropdown info will be displayed -->
+                <tr >
+                  <tr data-bind="visible: showDropdown, website.length > 1">
+                    <td><a data-bind="attr: { href: website }, text: website"></a></td>
+                  </tr>
+                  <tr data-bind="visible: showDropdown, address.length > 1">
+                    <td>address: <span data-bind="text: address"></span></td>
+                  </tr>
+                  <tr data-bind="visible: showDropdown, phone.length > 1">
+                    <td>Phone: <span data-bind="text: phone"></span></td>
+                  </tr>
                 </tr>
             </tbody>
           </table>
@@ -62,6 +75,7 @@
     <script src="js/lib/jquery.js"></script>
     <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/mapstyles.js"></script>
+    <script src="js/drawingmanager.js"></script>
     <script src="js/app.js"></script>
     <script src="js/disqusModal.js"></script>
     <script async defer

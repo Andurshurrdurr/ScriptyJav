@@ -1,11 +1,11 @@
-// Here we add our locations
+// We begin by adding our locations
 var locations = [
-  {id: 1, title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-  {id: 2, title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-  {id: 3, title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-  {id: 4, title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-  {id: 5, title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-  {id: 6, title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
+  {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
+  {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
+  {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
+  {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
+  {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
+  {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
 ];
 
 // Map and polygon as global variables
@@ -16,13 +16,36 @@ var foursquareClientSecret = "3VB2Y10IVTA1VYICIB5ORQKBYP4LOKWD0RZSVKFF0OWH2NFF";
 // For our modal
 var modal = document.getElementById('myModal');
 
+// Lets get som gifs!
+var numGifs = 25;
+var giphyurl = 'https://api.giphy.com/v1/gifs/search?api_key=1d34a409c28f4202a1c4cf94dbd4676b&q=NewYork&limit=' +
+                numGifs + '&offset=0&rating=G&lang=en'
+var gifs = [];
+
+$.getJSON(giphyurl)
+  .done(function(data){
+    console.log("got lotsa gifs!")
+    gifs = data.data;
+    console.log(gifs)
+    console.log(gifs[1].embed_url)
+  })
+  .fail(function(jqxhr, textStatus, error){
+    var err = textStatus + ", " + error;
+    console.log("Giphy request failed : " + err);
+  });
+
+
 // Helperfunction for creating text for the infowindow
 var makeContent = function(location){
   // First we format the content to html
+  var gifnum =  Math.round(Math.random() * (numGifs - 1));
+  console.log(gifnum)
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
+  '<iframe src="'+ gifs[gifnum].embed_url +'" alt="GIFFF" frameBorder="0"></iframe>' +
   '<div class="infoContent">' + location.website + '</div>' +
   '<div class="infoContent">' + location.address + '</div>' +
   '<div class="infoContent">' + location.phone + '</div></div>';
+  console.log(content);
   // And return the content
   return content;
 }
@@ -40,12 +63,12 @@ function locationClicked (location) {
   },700);
 }
 
+
 // Out location class
-var Location = function(location, loclist) {
+var Location = function(location, loclist, marker="") {
   // First we set the self variable
   var self = this;
   // Next we initiate all the initial attributes
-  self.id = location.id;
   self.title = location.title;
   self.lat = location.location.lat;
   self.lng = location.location.lng;
@@ -97,6 +120,7 @@ var Location = function(location, loclist) {
   self.marker = new google.maps.Marker({
     map: map,
     title: self.title,
+    icon: marker,
     position: new google.maps.LatLng(self.lat, self.lng),
     animation: google.maps.Animation.DROP,
   })
@@ -108,6 +132,7 @@ var Location = function(location, loclist) {
 
   // Function for clearing infowindows
   self.displayInfo = function (){
+    // var toggleDropdown = !showDropdown();
     loclist().forEach(function(location){
       location.infoWindow.close();
       location.showDropdown(false);
@@ -122,16 +147,29 @@ var Location = function(location, loclist) {
   });
 };
 
-// This is our viewmodel--------------------------------------------------------
+// Function to give us the current & previousValue in a subscription
 
+ko.subscribable.fn.subscribeChanged = function(callback) {
+  var previousValue;
+  this.subscribe(function(_previousValue) {
+      previousValue = _previousValue;
+  }, undefined, 'beforeChange');
+  this.subscribe(function(latestValue) {
+      callback(latestValue, previousValue );
+  });
+};
+
+// This is our viewmodel--------------------------------------------------------
 
 var ViewModel = function () {
   // First we set the self variable
   var self = this;
   // Then we initiate a couple of attributes for search and locations
   self.searchInput = ko.observable("");
-  self.locationList = ko.observableArray([]);
   self.currentThread = ko.observable(0);
+  self.locationList = ko.observableArray([]);
+  // Observable for startlocation
+  self.selectedStart = ko.observable("");
   // Next we get the map object
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 40.7413549, lng: -73.9980244},
@@ -141,21 +179,32 @@ var ViewModel = function () {
   });
 
   // initialize location markers and push them to the locationlist obs array
-  locations.forEach(function(location){
+  locations.forEach(function(location) {
 		self.locationList.push(new Location(location, self.locationList));
 	});
+
+  // init locations for startlocation
+  var marker = "https://cdn1.iconfinder.com/data/icons/instagram-ui-glyph/48/Sed-09-128.png"
+
+  // // Function which runs whenever the location is changed
+  // self.selectedStart.subscribeChanged(function(latestValue, previousValue) {
+  //   latestValue.visible(true);
+  //   previousValue ? previousValue.visible(false) : false;
+  // });
+
+  // Drawingmanager
 
   self.toggleDrawing = function(){
     console.log("Drawing toggled!")
     if (drawingManager.map) {
+      // In case the user drew anything, get rid of the polygon
+      if (polygon !== null) {
+        polygon.setMap(null);
+      }
       drawingManager.setMap(null);
       // Shorthand for loop to set locations visible
       for (var i in drawingManager.searchLocs){
         drawingManager.searchLocs[i].inPolygon(true);
-      }
-      // In case the user drew anything, get rid of the polygon
-      if (polygon !== null) {
-        polygon.setMap(null);
       }
     } else {
       drawingManager.setMap(map);
@@ -164,6 +213,51 @@ var ViewModel = function () {
     }
   };
 
+  // Function for getting the place searched for through api
+  self.searchPlaces = function() {
+    var places = searchBox.getPlaces();
+    if (places.length == 0) {
+      alert('We did not find any places matching that search!');
+    } else {
+      console.log(places[0]);
+      // And we construct a location from the place
+      var icon = {
+        url: places[0].icon,
+        size: new google.maps.Size(35, 35),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(15, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+      var searchLoc = {title: places[0].formatted_address, location: {lat: places[0].geometry.location.lat(), lng:places[0].geometry.location.lng()}}
+      self.selectedStart() ? self.selectedStart().visible(false) : false;
+      self.selectedStart(new Location(searchLoc, self.locationList, icon));
+    }
+  }
+
+  // Function to toggle the side panel
+  self.toggleNav = function(){
+    var sidepanel = $(".side-panel");
+    var overlay = $("#google-map-overlay");
+    console.log(overlay.css('opacity'))
+    if (sidepanel.css("width") === "340px"){
+      overlay.css('opacity', '0');
+      sidepanel.css("width", "0px");
+      sidepanel.css("padding", "0px");
+    } else{
+      overlay.css("opacity", '0.5');
+      sidepanel.css("width", "340px");
+      sidepanel.css("padding", "10px 10px 30px 10px");
+    }
+  }
+
+  // DirectionsService
+  self.getRoute = function(){
+    directionsDisplay.setMap(map);
+    calculateAndDisplayRoute(self);
+  }
+  self.resetRoute = function(){
+    directionsDisplay.setMap(null);
+  }
   // Filter: The function will return array of locations filtered by searchInput.
   // Knockout doesnt give documentation on their utilfunctions, but I found this
   // guide:

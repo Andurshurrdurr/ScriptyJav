@@ -12,7 +12,16 @@ body {
 }
 
 input {
-  font-size: 12px;
+  font-size: 18px;
+  padding-left: 10px;
+  border-radius: 3px;
+  border: 1px solid black;
+  height: 40px;
+}
+
+button {
+  border-radius: 3px;
+  border: 1px solid black;
 }
 
 h1 {
@@ -22,11 +31,6 @@ h1 {
   text-align: center;
 }
 
-#hide-listings,
-#show-listings {
-  width: 48%;
-}
-
 hr {
   background: #D0D7D9;
   height: 1px;
@@ -34,27 +38,70 @@ hr {
   border: none;
 }
 
+table{
+   border: 1px solid black;
+}
+
+td, tr {
+    padding: 5px;
+}
+
 #map {
   bottom:0px;
   height: 100%;
-  left: 362px;
+  left: 0px;
   position: absolute;
   right: 0px;
+  z-index: 1;
 }
 
 .side-panel {
+  border: 1px solid black;
   background: #fff;
-  border: 1px solid #999;
-  border-radius: 3px;
   height: 100%;
   line-height: 35px;
   padding: 10px 10px 30px 10px;
   text-align: left;
   width: 340px;
+  position: fixed;
+  transition: 0.5s;
+  z-index: 3;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction:column;
 }
 
-.options{
-  height:30vh;
+.toggle-panel-button {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    z-index: 2;
+    height: 40px;
+    width: 40px;
+    margin: 20px 0 0 10px;
+}
+
+.flex-row {
+  display: flex;
+  width: 100%;
+}
+
+.btn-block {
+  flex-grow: 1;
+  height: 40px;
+}
+
+#google-map-overlay {
+    width  : 100vw;
+    height : 100vh;
+    background: black;
+    position: absolute;
+    transition: 0.5s;
+    opacity: 0.5;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    pointer-events: none;
 }
 
 #pano {
@@ -65,10 +112,6 @@ hr {
 #places-search,
 #search-within-time-text {
   width: 84%;
-}
-
-.text {
-  font-size: 12px;
 }
 
 #toggle-drawing {
@@ -85,11 +128,29 @@ hr {
   width: 24%;
 }
 
+.resultsTable {
+  width:100%;
+  border-collapse: collapse;
+  border: 2px solid #808da3;
+}
+
+.resultHeader {
+  background-color: #white;
+  border: 1px solid black;
+  font-size: 18px;
+}
+
+.resultDetails {
+  background-color: #dbdbdb;
+  text-align: right;
+  width:100%;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 5; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -102,10 +163,11 @@ hr {
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
+    border: 3px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
+    max-height: 90vh;
 }
 
 /* The Close Button */
@@ -121,4 +183,15 @@ hr {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.footer {
+  z-index: 4;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0.7rem;
+  background-color: #efefef;
+  text-align: center;
 }

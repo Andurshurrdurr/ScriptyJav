@@ -7,42 +7,62 @@
     </script> -->
   </head>
   <body>
+    <button class="toggle-panel-button" data-bind="click: $root.toggleNav">Nav</button>
     <div class="container">
       <div class="side-panel">
         <div class="options">
-          <h1>Input</h1>
-          <p>Filter list:</p>
-          <input data-bind="textInput: searchInput">
+          <h1 data-bind="click: $root.toggleNav">Navigate</h1>
+          <h4>Filter locations:</h4>
+          <div class="flex-row">
+            <input data-bind="textInput: searchInput" placeholder="search"> ||
+            <button class="btn-block" data-bind="click: function() { $root.toggleDrawing(); $root.toggleNav() }">Draw</button>
+          </div>
+          <h4>Where will you start your journey?</h4>
+          <div class="flew-row">
+            <input id="places-search">||<button class="btn-block" data-bind="click: function(){ $root.resetRoute(); $root.searchPlaces() }">Find</button>
+          </div>
+          <div class="selectedStart">
+
+            <p><b data-bind="visible: selectedStart">You have selected:</b><span data-bind="text: selectedStart().title"></span></p> <hr>
+          </div>
+          <div class="flex-row">
+            <button class="btn-block" data-bind="click:  function() { $root.getRoute(); $root.toggleNav() }">Get route</button> ||
+            <button class="btn-block" data-bind="click: $root.resetRoute">Reset route</button>
+          </div>
         </div>
-        <button data-bind="click: $root.toggleDrawing">Draw</button>
-        <button id="myBtn">Discuss the site</button>
         <hr>
         <div class="results">
           <h1>Results</h1>
-          <table>
+          <table class="resultsTable">
             <!-- Foreach feature here -->
             <tbody data-bind="foreach: filteredLocations">
-                <tr>
-                    <td data-bind="text: title, click: locationClicked"></td>
+                <tr data-bind="click: locationClicked" class="resultHeader">
+                    <td data-bind="text: title"></td>
+                    <td style="text-align:right;">---</td>
                 </tr>
                 <!-- If clicked, a dropdown info will be displayed -->
-                <tr >
-                  <tr data-bind="visible: showDropdown, website.length > 1">
-                    <td><a data-bind="attr: { href: website }, text: website"></a></td>
-                  </tr>
-                  <tr data-bind="visible: showDropdown, address.length > 1">
-                    <td>address: <span data-bind="text: address"></span></td>
-                  </tr>
-                  <tr data-bind="visible: showDropdown, phone.length > 1">
-                    <td>Phone: <span data-bind="text: phone"></span></td>
-                  </tr>
+                <tr class="resultDetails" data-bind="visible: showDropdown, website.length > 1">
+                  <td>Website:</td>
+                  <td><a data-bind="attr: { href: website }, text: website"></a></td>
+                </tr>
+                <tr class="resultDetails" data-bind="visible: showDropdown, address.length > 1">
+                  <td>Address: </td>
+                  <td data-bind="text: address"></td>
+                </tr>
+                <tr class="resultDetails bottomResult" data-bind="visible: showDropdown, phone.length > 1">
+                  <td>Phone</td>
+                  <td data-bind="text: phone"></td>
                 </tr>
             </tbody>
           </table>
         </div>
       </div>
       <div id="map"></div>
+      <div id="google-map-overlay"></div>
     </div>
+    <footer class="footer">
+      Made by Anders L. Hurum | <button id="myBtn">Join the discussion</button>
+    </footer>
     <!-- The Modal -->
     <div id="myModal" class="modal">
       <div class="modal-content">
@@ -56,7 +76,7 @@
 
         var disqus_config = function () {
           // var disqus_developer = 1;
-          this.page.url = 'https://andurshurrdurr.github.io/ScriptyJav/';  // Replace PAGE_URL with your page's canonical URL variable
+          this.page.url = 'https://peakbreaker.github.io/ScriptyJav/';  // Replace PAGE_URL with your page's canonical URL variable
           this.page.identifier = 1; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
         };
 
@@ -74,7 +94,7 @@
     <script src="js/lib/jquery.js"></script>
     <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/mapstyles.js"></script>
-    <script src="js/drawingmanager.js"></script>
+    <script src="js/mapsmanager.js"></script>
     <script src="js/app.js"></script>
     <script src="js/disqusModal.js"></script>
     <script async defer

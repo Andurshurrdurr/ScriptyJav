@@ -12,7 +12,7 @@ body {
 }
 
 input {
-  font-size: 18px;
+  font-size: 16px;
   padding-left: 10px;
   border-radius: 3px;
   border: 1px solid black;
@@ -22,13 +22,18 @@ input {
 button {
   border-radius: 3px;
   border: 1px solid black;
+  font-size: 16px;
 }
 
 h1 {
   color: #525454;
-  font-size: 22px;
+  font-size: 24px;
   margin: 0 0 10px 0;
   text-align: center;
+}
+
+h4 {
+  font-size: 18px;
 }
 
 hr {
@@ -60,9 +65,9 @@ td, tr {
   background: #fff;
   height: 100%;
   line-height: 35px;
-  padding: 10px 10px 30px 10px;
+  padding: 20px 10px 30px 10px;
   text-align: left;
-  width: 340px;
+  width: 320px;
   position: fixed;
   transition: 0.5s;
   z-index: 3;
@@ -71,11 +76,12 @@ td, tr {
   flex-direction:column;
 }
 
-.toggle-panel-button {
+.toggle-nav-button {
     position: absolute;
+    background-color: #2b3544;
     top: 0;
     left: 25px;
-    z-index: 2;
+    z-index: 4;
     height: 40px;
     width: 40px;
     margin: 20px 0 0 10px;
@@ -174,7 +180,7 @@ td, tr {
 .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
 }
 

@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>ScriptyJav</title>
+    <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
     <!-- <script type="text/javascript">
       var disqus_developer = 1; // this would set it to developer mode
     </script> -->
   </head>
   <body>
-    <button class="toggle-panel-button" data-bind="click: $root.toggleNav">Nav</button>
+    <button class="toggle-nav-button" data-bind="click: $root.toggleNav"></button>
     <div class="container">
       <div class="side-panel">
         <div class="options">
           <h1 data-bind="click: $root.toggleNav">Navigate</h1>
           <h4>Filter locations:</h4>
           <div class="flex-row">
-            <input data-bind="textInput: searchInput" placeholder="search"> ||
+            <input data-bind="textInput: searchInput" placeholder="search">
             <button class="btn-block" data-bind="click: function() { $root.toggleDrawing(); $root.toggleNav() }">Draw</button>
           </div>
           <h4>Where will you start your journey?</h4>
           <div class="flew-row">
-            <input id="places-search">||<button class="btn-block" data-bind="click: function(){ $root.resetRoute(); $root.searchPlaces() }">Find</button>
+            <input id="places-search">
+            <button class="btn-block" data-bind="click: function(){ $root.resetRoute(); $root.searchPlaces() }">Find</button>
           </div>
           <div class="selectedStart">
 
@@ -38,7 +43,7 @@
             <tbody data-bind="foreach: filteredLocations">
                 <tr data-bind="click: locationClicked" class="resultHeader">
                     <td data-bind="text: title"></td>
-                    <td style="text-align:right;">---</td>
+                    <td style="text-align: right;">-</td>
                 </tr>
                 <!-- If clicked, a dropdown info will be displayed -->
                 <tr class="resultDetails" data-bind="visible: showDropdown, website.length > 1">

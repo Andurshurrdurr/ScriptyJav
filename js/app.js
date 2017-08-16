@@ -42,9 +42,9 @@ var makeContent = function(location){
   console.log(gifnum)
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
   '<iframe src="'+ gifs[gifnum].embed_url +'" alt="GIFFF" frameBorder="0"></iframe>' +
-  '<div class="infoContent">' + location.website + '</div>' +
-  '<div class="infoContent">' + location.address + '</div>' +
-  '<div class="infoContent">' + location.phone + '</div></div>';
+  '<div class="infoContent">' + location.website() + '</div>' +
+  '<div class="infoContent">' + location.address() + '</div>' +
+  '<div class="infoContent">' + location.phone() + '</div></div>';
   console.log(content);
   // And return the content
   return content;
@@ -74,9 +74,9 @@ var Location = function(location, loclist, marker="") {
   self.lng = location.location.lng;
 
   // And sets some empty values we will fill with API requests
-  self.website = "www.google.com";
-  self.address = "Villaveien";
-  self.phone = "1289378";
+  self.website = ko.observable("");
+  self.address = ko.observable("");
+  self.phone = ko.observable("");
 
   // And observable to toggle the location and dropdown visible
   self.visible = ko.observable(true);
@@ -90,27 +90,34 @@ var Location = function(location, loclist, marker="") {
   "&query=" + self.title
   console.log()
 
-  // Next we do the AJAX request using getJSON - uncommented for now to reduce requests
-
-  // $.getJSON(foursquareURL)
-  //   // Do the responsehandler
-  //   .done(function( data ){
-  //     // Get the response
-  //     var response = data.response.venues[0];
-  //     // Check if response is anything
-  //     if (response) {
-  //       // Do a nice formatting using if statement shorthand
-  //       console.log("accessed the foursquareURL")
-  //       self.website = response.url ? response.url : "No website";
-  //       self.address = response.formattedAddress ? response.formattedAddress[0] : "No formatted address";
-  //       self.phone = response.contact.formattedPhone ? response.contact.formattedPhone : "No phone number";
-  //     } else {}
-  //   })
-  //   // And finally an error handler if our request fails
-  //   .fail(function( jqxhr, textStatus, error ) {
-  //     var err = textStatus + ", " + error;
-  //     console.log( "Request Failed: " + err );
-  // });
+  // Next we do the AJAX request to foursqare using getJSON
+  $.getJSON(foursquareURL)
+    // Do the responsehandler
+    .done(function( data ){
+      // Get the response
+      var response = data.response.venues[0];
+      // Check if response is anything
+      if (response) {
+        // Do a nice formatting using if statement shorthand
+        console.log("accessed the foursquareURL")
+        console.log("Got response for website " + response.url)
+        self.website(response.url ? response.url : "No website");
+        self.address(response.formattedAddress ? response.formattedAddress[0] : "No formatted address");
+        self.phone(response.contact.formattedPhone ? response.contact.formattedPhone : "No phone number");
+      } else {
+        self.website("No website");
+        self.address("No formatted address");
+        self.phone("No phone number");
+      }
+    })
+    // And finally an error handler if our request fails
+    .fail(function( jqxhr, textStatus, error ) {
+      var err = textStatus + ", " + error;
+      console.log( "Request Failed: " + err );
+      self.website("No website");
+      self.address("No formatted address");
+      self.phone("No phone number");
+  });
 
   // Then make the infowindow and marker for google maps
   setTimeout(function () {
@@ -239,13 +246,13 @@ var ViewModel = function () {
     var sidepanel = $(".side-panel");
     var overlay = $("#google-map-overlay");
     console.log(overlay.css('opacity'))
-    if (sidepanel.css("width") === "340px"){
+    if (sidepanel.css("width") === "320px"){
       overlay.css('opacity', '0');
       sidepanel.css("width", "0px");
       sidepanel.css("padding", "0px");
-    } else{
+    } else {
       overlay.css("opacity", '0.5');
-      sidepanel.css("width", "340px");
+      sidepanel.css("width", "320px");
       sidepanel.css("padding", "10px 10px 30px 10px");
     }
   }

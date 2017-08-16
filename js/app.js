@@ -34,11 +34,11 @@ $.getJSON(giphyurl)
     console.log("Giphy request failed : " + err);
   });
 
-
 // Helperfunction for creating text for the infowindow
 var makeContent = function(location){
-  // First we format the content to html
+  // Get a random gif from our giphy api call
   var gifnum =  Math.round(Math.random() * (numGifs - 1));
+  // First we format the content to html
   console.log(gifnum)
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
   '<iframe src="'+ gifs[gifnum].embed_url +'" alt="GIFFF" frameBorder="0"></iframe>' +
@@ -193,12 +193,6 @@ var ViewModel = function () {
   // init locations for startlocation
   var marker = "https://cdn1.iconfinder.com/data/icons/instagram-ui-glyph/48/Sed-09-128.png"
 
-  // // Function which runs whenever the location is changed
-  // self.selectedStart.subscribeChanged(function(latestValue, previousValue) {
-  //   latestValue.visible(true);
-  //   previousValue ? previousValue.visible(false) : false;
-  // });
-
   // Drawingmanager
 
   self.toggleDrawing = function(){
@@ -235,7 +229,9 @@ var ViewModel = function () {
         anchor: new google.maps.Point(15, 34),
         scaledSize: new google.maps.Size(25, 25)
       };
-      var searchLoc = {title: places[0].formatted_address, location: {lat: places[0].geometry.location.lat(), lng:places[0].geometry.location.lng()}}
+      var searchLoc = {title: places[0].formatted_address,
+                       location: {lat: places[0].geometry.location.lat(),
+                                  lng:places[0].geometry.location.lng()}}
       self.selectedStart() ? self.selectedStart().visible(false) : false;
       self.selectedStart(new Location(searchLoc, self.locationList, icon));
     }

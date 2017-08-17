@@ -32,7 +32,7 @@ setTimeout(function () {
   drawingManager.addListener('overlaycomplete', function(event) {
     // First, check if there is an existing polygon.
     // If there is, get rid of it and remove the markers
-    console.log("Overlay is complete!")
+    console.log("Overlay is complete!");
     // Switching the drawing mode to the HAND (i.e., no longer drawing).
     drawingManager.setDrawingMode(null);
     // Creating a new editable polygon from the overlay.
@@ -46,15 +46,10 @@ setTimeout(function () {
   });
 }, 1000);
 
-setTimeout(function () {
-    console.log(drawingManager)
-}, 1200);
-
-
 // polygon <-> markers --- Iterate over markers
 function searchWithinPolygon(polygon, locations) {
   for (var i = 0; i < locations.length; i++) {
-    var position = new google.maps.LatLng(locations[i].lat, locations[i].lng)
+    var position = new google.maps.LatLng(locations[i].lat, locations[i].lng);
     if (google.maps.geometry.poly.containsLocation(position, polygon)) {
       locations[i].inPolygon(true);
     } else {
@@ -86,7 +81,7 @@ function calculateAndDisplayRoute(viewmodel) {
   }, function(response, status) {
     if (status === 'OK') {
       // And display the results
-      console.log(response)
+      console.log(response);
       directionsDisplay.setDirections(response);
       var route = response.routes[0];
     } else {

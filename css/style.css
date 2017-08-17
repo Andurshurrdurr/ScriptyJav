@@ -73,7 +73,7 @@ td, tr {
   z-index: 3;
   overflow-x: hidden;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 }
 
 .toggle-nav-button {
@@ -149,7 +149,7 @@ td, tr {
 .resultDetails {
   background-color: #dbdbdb;
   text-align: right;
-  width:100%;
+  width: 100%;
 }
 
 /* The Modal (background) */

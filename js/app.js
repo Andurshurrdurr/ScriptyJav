@@ -26,16 +26,10 @@ $.getJSON(giphyurl)
   .done(function (data) {
     gifs = data.data;
   })
-<<<<<<< HEAD
-  .fail(function (jqxhr, textStatus, error) {
-    var err = textStatus + ', ' + error;
-    console.log('An error occured in accessing giphy api' + err);
-=======
   .fail(function(jqxhr, textStatus, error){
     var err = textStatus + ", " + error;
     console.log("Giphy request failed : " + err);
     alert("Giphy API request failed. No Gifs! :'(");
->>>>>>> fix: All results viewable, errors alerts user and gif disclaim
   });
 
 // Helperfunction for creating text for the infowindow
@@ -44,12 +38,8 @@ var makeContent = function (location) {
   var gifnum = Math.round(Math.random() * (numGifs - 1));
   // First we format the content to html
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
-<<<<<<< HEAD
-  '<iframe src="' + gifs[gifnum].embed_url + '" alt="GIFFF" frameBorder="0"></iframe>' +
-=======
   '<div class="infoContent" style="text-align: center;"><i>(The gif is just for fun &#9786;)</i></div>' +
   '<iframe src="'+ gifs[gifnum].embed_url +'" alt="GIFFF" frameBorder="0"></iframe>' +
->>>>>>> fix: All results viewable, errors alerts user and gif disclaim
   '<div class="infoContent">' + location.website() + '</div>' +
   '<div class="infoContent">' + location.address() + '</div>' +
   '<div class="infoContent">' + location.phone() + '</div></div>';
@@ -113,15 +103,6 @@ var Location = function (location, loclist, marker = '') {
       }
     })
     // And finally an error handler if our request fails
-<<<<<<< HEAD
-    .fail(function (jqxhr, textStatus, error) {
-      var err = textStatus + ', ' + error;
-      console.log('an error occured in accessing forsquare api' + err);
-      self.website('No website');
-      self.address('No formatted address');
-      self.phone('No phone number');
-    });
-=======
     .fail(function( jqxhr, textStatus, error ) {
       var err = textStatus + ", " + error;
       console.log( "Request Failed: " + err );
@@ -130,7 +111,6 @@ var Location = function (location, loclist, marker = '') {
       self.phone("No phone number");
       alert("Foursquare api request failed.  No sata on locations.");
   });
->>>>>>> fix: All results viewable, errors alerts user and gif disclaim
 
   // Then make the infowindow and marker for google maps
   setTimeout(function () {
@@ -258,15 +238,9 @@ var ViewModel = function () {
       sidepanel.css('width', '0px');
       sidepanel.css('padding', '0px');
     } else {
-<<<<<<< HEAD
-      overlay.css('opacity', '0.5');
-      sidepanel.css('width', '320px');
-      sidepanel.css('padding', '10px 10px 30px 10px');
-=======
       overlay.css("opacity", '0.5');
       sidepanel.css("width", "320px");
       sidepanel.css("padding", "20px 10px 30px 10px");
->>>>>>> fix: All results viewable, errors alerts user and gif disclaim
     }
   };
   // DirectionsService
@@ -305,11 +279,6 @@ function initApp () {
 }
 
 // This is an errorhandler called if loading the google api fails
-<<<<<<< HEAD
-function errorHandler () {
-  alert('Google maps has failed to load.');
-=======
 function errorHandler() {
   alert("Google maps has failed to load.");
->>>>>>> fix: All results viewable, errors alerts user and gif disclaim
 }

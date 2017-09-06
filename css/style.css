@@ -90,11 +90,12 @@ td, tr {
 
 .flex-row {
   display: flex;
+  align-items: center;
   width: 100%;
 }
 
 .btn-block {
-  flex-grow: 1;
+  flex-grow: .8;
   height: 40px;
 }
 
@@ -117,8 +118,8 @@ td, tr {
 }
 
 #places-search,
-#search-within-time-text {
-  width: 84%;
+#filterLocs {
+  flex-grow: 0.8;
 }
 
 #toggle-drawing {
@@ -146,7 +147,7 @@ td, tr {
 .resultHeader {
   background-color: #white;
   border: 1px solid black;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .resultDetails {

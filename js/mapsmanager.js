@@ -3,8 +3,8 @@ var drawingManager;
 var directionsService;
 var directionsDisplay;
 var searchBox;
-// setTimeout function so the google maps libs can load before we access them
-setTimeout(function () {
+// callback function so the google maps libs can load before we access them
+var initApp = function () {
     // Init directionsService from google maps api
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
@@ -27,12 +27,9 @@ setTimeout(function () {
       ]
     }
   });
-  console.log(drawingManager);
 
   drawingManager.addListener('overlaycomplete', function(event) {
-    // First, check if there is an existing polygon.
-    // If there is, get rid of it and remove the markers
-    console.log("Overlay is complete!");
+    // If editable polygon is added later, it must first clear the old one here 
     // Switching the drawing mode to the HAND (i.e., no longer drawing).
     drawingManager.setDrawingMode(null);
     // Creating a new editable polygon from the overlay.
@@ -44,7 +41,7 @@ setTimeout(function () {
     polygon.getPath().addListener('set_at', searchWithinPolygon);
     polygon.getPath().addListener('insert_at', searchWithinPolygon);
   });
-}, 1000);
+}
 
 // polygon <-> markers --- Iterate over markers
 function searchWithinPolygon(polygon, locations) {

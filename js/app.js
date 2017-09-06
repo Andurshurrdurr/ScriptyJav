@@ -25,6 +25,7 @@ var gifs = [];
 $.getJSON(giphyurl)
   .done(function (data) {
     gifs = data.data;
+    console.log(gifs);
   })
   .fail(function(jqxhr, textStatus, error){
     var err = textStatus + ", " + error;
@@ -36,10 +37,11 @@ $.getJSON(giphyurl)
 var makeContent = function (location) {
   // Get a random gif from our giphy api call
   var gifnum = Math.round(Math.random() * (numGifs - 1));
+  var gifsrc = (gifs[0] === undefined) ? '' : gifs[gifnum].embed_url;
   // First we format the content to html
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
   '<div class="infoContent" style="text-align: center;"><i>(The gif is just for fun &#9786;)</i></div>' +
-  '<iframe src="'+ gifs[gifnum].embed_url +'" alt="GIFFF" frameBorder="0"></iframe>' +
+  '<iframe src="'+ gifsrc + '" alt="GIFFF" frameBorder="0"></iframe>' +
   '<div class="infoContent">' + location.website() + '</div>' +
   '<div class="infoContent">' + location.address() + '</div>' +
   '<div class="infoContent">' + location.phone() + '</div></div>';
@@ -69,15 +71,13 @@ var Location = function (location, loclist, marker = '') {
   self.lng = location.location.lng;
 
   // And sets some empty values we will fill with API requests
-  self.website = ko.observable('');
-  self.address = ko.observable('');
-  self.phone = ko.observable('');
-
+  self.website = ko.observable('No website');
+  self.address = ko.observable('No formatted address');
+  self.phone = ko.observable('No phone number');
   // And observable to toggle the location and dropdown visible
   self.visible = ko.observable(true);
   self.inPolygon = ko.observable(true);
   self.showDropdown = ko.observable(false);
-
   // And we create a webservice url from the data, which we will request
   var foursquareURL = 'https://api.foursquare.com/v2/venues/search?ll=' +
   self.lat + ',' + self.lng + '&client_id=' + foursquareClientID +
@@ -96,26 +96,18 @@ var Location = function (location, loclist, marker = '') {
         self.website(response.url ? response.url : 'No website');
         self.address(response.formattedAddress ? response.formattedAddress[0] : 'No formatted address');
         self.phone(response.contact.formattedPhone ? response.contact.formattedPhone : 'No phone number');
-      } else {
-        self.website('No website');
-        self.address('No formatted address');
-        self.phone('No phone number');
-      }
+      }      
     })
     // And finally an error handler if our request fails
     .fail(function( jqxhr, textStatus, error ) {
       var err = textStatus + ", " + error;
       console.log( "Request Failed: " + err );
-      self.website("No website");
-      self.address("No formatted address");
-      self.phone("No phone number");
-      alert("Foursquare api request failed.  No sata on locations.");
-  });
-
-  // Then make the infowindow and marker for google maps
-  setTimeout(function () {
+      // alert("Foursquare api request failed.  No data on locations.");
+  })
+  .always(function(){
+    // always make the infowindow and marker for google maps
     self.infoWindow = new google.maps.InfoWindow({content: makeContent(self)});
-  }, 1000);
+  });
 
   self.marker = new google.maps.Marker({
     map: map,
@@ -129,16 +121,16 @@ var Location = function (location, loclist, marker = '') {
   self.markerVisible = ko.computed(function () {
     return self.visible() ? self.marker.setMap(map) : self.marker.setMap(null);
   });
-
+  
   // Function for clearing infowindows
   self.displayInfo = function () {
-    // var toggleDropdown = !showDropdown();
+    var toggleDropdown = !self.showDropdown();
     loclist().forEach(function (location) {
       location.infoWindow.close();
       location.showDropdown(false);
     });
     self.infoWindow.open(map, self.marker);
-    self.showDropdown(true);
+    self.showDropdown(toggleDropdown);
   };
 
   // And finally listener for when user clicks the marker
@@ -270,7 +262,6 @@ var ViewModel = function () {
     	return result;
     });
   }, self);
-  // setTimeout function so the google maps libs can load before we access them
 };
 
 // Callback for loading the google api

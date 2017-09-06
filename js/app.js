@@ -102,7 +102,7 @@ var Location = function (location, loclist, marker = '') {
     .fail(function( jqxhr, textStatus, error ) {
       var err = textStatus + ", " + error;
       console.log( "Request Failed: " + err );
-      // alert("Foursquare api request failed.  No data on locations.");
+      alert("Foursquare api request failed.  No data on locations.");
   })
   .always(function(){
     // always make the infowindow and marker for google maps

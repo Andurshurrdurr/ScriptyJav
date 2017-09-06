@@ -109,7 +109,7 @@ var Location = function (location, loclist, marker = '') {
       self.website("No website");
       self.address("No formatted address");
       self.phone("No phone number");
-      alert("Foursquare api request failed.  No sata on locations.");
+      alert("Foursquare api request failed.  No data on locations.");
   });
 
   // Then make the infowindow and marker for google maps

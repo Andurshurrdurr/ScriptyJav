@@ -27,12 +27,9 @@ setTimeout(function () {
       ]
     }
   });
-  console.log(drawingManager);
 
   drawingManager.addListener('overlaycomplete', function(event) {
-    // First, check if there is an existing polygon.
-    // If there is, get rid of it and remove the markers
-    console.log("Overlay is complete!");
+    // If editable polygon is added later, it must first clear the old one here 
     // Switching the drawing mode to the HAND (i.e., no longer drawing).
     drawingManager.setDrawingMode(null);
     // Creating a new editable polygon from the overlay.

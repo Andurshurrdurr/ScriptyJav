@@ -3,7 +3,7 @@ var drawingManager;
 var directionsService;
 var directionsDisplay;
 var searchBox;
-// setTimeout function so the google maps libs can load before we access them
+// callback function so the google maps libs can load before we access them
 var initApp = function () {
     // Init directionsService from google maps api
     directionsService = new google.maps.DirectionsService;
@@ -41,7 +41,7 @@ var initApp = function () {
     polygon.getPath().addListener('set_at', searchWithinPolygon);
     polygon.getPath().addListener('insert_at', searchWithinPolygon);
   });
-}, 1000);
+}
 
 // polygon <-> markers --- Iterate over markers
 function searchWithinPolygon(polygon, locations) {

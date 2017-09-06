@@ -6,9 +6,6 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <script type="text/javascript">
-
-    </script> -->
   </head>
   <body>
     <button class="toggle-nav-button" data-bind="click: $root.toggleNav"></button>
@@ -18,12 +15,12 @@
           <h1 data-bind="click: $root.toggleNav">Navigate</h1>
           <h4>Filter locations:</h4>
           <div class="flex-row">
-            <input data-bind="textInput: searchInput" placeholder="search">
+            <input id="filterLocs" data-bind="textInput: searchInput" placeholder="Filter Locations">
             <button class="btn-block" data-bind="click: function() { $root.toggleDrawing(); $root.toggleNav() }">Draw</button>
           </div>
           <h4>Where will you start your journey?</h4>
           <div class="flew-row">
-            <input id="places-search">
+            <input id="places-search" placeholder="Search for places">
             <button class="btn-block" data-bind="click: function(){ $root.resetRoute(); $root.searchPlaces() }">Find</button>
           </div>
           <div class="selectedStart">
@@ -41,7 +38,7 @@
           <table class="resultsTable">
             <!-- Foreach feature here -->
             <tbody data-bind="foreach: filteredLocations">
-                <tr data-bind="click: locationClicked" class="resultHeader">
+                <tr style="cursor: pointer;" data-bind="click: locationClicked" class="resultHeader">
                     <td data-bind="text: title"></td>
                     <td style="text-align: right;">-</td>
                 </tr>
@@ -68,7 +65,7 @@
     <footer class="footer">
       Made by Anders L. Hurum | <button id="myBtn">Join the discussion</button>
     </footer>
-    <!-- The Modal -->
+    <!-- The disqus modal -->
     <div id="myModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -78,7 +75,8 @@
             /**
             *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
             *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-            /*
+            /*Request Failed: error, Too Many Requests
+
             var disqus_config = function () {
             this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
             this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
@@ -96,7 +94,6 @@
           }
         </script>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                    
       </div>
     </div>
 

@@ -4,7 +4,7 @@ var directionsService;
 var directionsDisplay;
 var searchBox;
 // setTimeout function so the google maps libs can load before we access them
-setTimeout(function () {
+var initApp = function () {
     // Init directionsService from google maps api
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});

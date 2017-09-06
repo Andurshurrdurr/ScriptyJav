@@ -270,7 +270,6 @@ var ViewModel = function () {
     	return result;
     });
   }, self);
-  // setTimeout function so the google maps libs can load before we access them
 };
 
 // Callback for loading the google api

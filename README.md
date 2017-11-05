@@ -20,13 +20,14 @@ Getting a local devenvironment running on your machine
 
 #### Instructions
 1. Clone this repository and open the index.html file in your browser
-2. You may experience issues/errors with this approach, in which case you should serve the files from the local server
+2. If you experience issues/errors with this approach, you may serve the files from a (local) server.
 3. You may also examine the running demo (see below)
-4. In the cloned repo you can now edit the code using your favorite texteditor / devenv
+4. In the cloned repo you can now edit the code using your favorite texteditor / devenv.
+5. To fork and start developing further on this project you may change the API keys for foursquare (foursquareClientID, foursquareClientSecret), the google maps api key in the source url in index.html and the disqus (s.src) url in index.html
 
 #### Known issues
-- Disqus will probably not work locally due to the disqus api expecting the requests to come from the "peakbreaker.com" domain
-- Due to this, the disqus scripts may throw wierd errors.  You can comment out the disqus api script in the index.html to 
+- Disqus may not work locally due to the disqus api expecting the requests to come from the "peakbreaker.com" domain
+- Due to this, the disqus scripts may throw wierd errors.  You can comment out the disqus api script in the index.html to see if disqus is the cause of the issue
 
 #### Demo
  See a running demo of this app on my website:

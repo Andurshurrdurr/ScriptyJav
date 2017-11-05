@@ -52,8 +52,8 @@ var makeContent = function (location) {
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
   gifcontent + '<div class="infoContent">' + location.website() + '</div>' +
   '<div class="infoContent">' + location.address() + '</div>' +
-  '<div class="infoContent">' + location.phone() + '</div>'
-  + '<div class="infoContent">' + location.foursquareError() + '</div></div>';
+  '<div class="infoContent">' + location.phone() + '</div>' +
+  '<div class="infoContent">' + location.foursquareError() + '</div></div>';
   // And return the content
   return content;
 };
@@ -118,7 +118,7 @@ var Location = function (location, loclist, marker = '') {
     // always make the infowindow and marker for google maps
     self.infoWindow = new google.maps.InfoWindow({content: makeContent(self)});
   });
-  
+
   self.marker = new google.maps.Marker({
     map: map,
     title: self.title,
@@ -131,7 +131,7 @@ var Location = function (location, loclist, marker = '') {
   self.markerVisible = ko.computed(function () {
     return self.visible() ? self.marker.setMap(map) : self.marker.setMap(null);
   });
-  
+
   // Function for clearing infowindows
   self.displayInfo = function () {
     var toggleDropdown = !self.showDropdown();

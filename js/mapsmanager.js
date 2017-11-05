@@ -29,7 +29,7 @@ var initMap = function () {
   });
 
   drawingManager.addListener('overlaycomplete', function(event) {
-    // If editable polygon is added later, it must first clear the old one here 
+    // If editable polygon is added later, it must first clear the old one here
     // Switching the drawing mode to the HAND (i.e., no longer drawing).
     drawingManager.setDrawingMode(null);
     // Creating a new editable polygon from the overlay.
@@ -41,7 +41,7 @@ var initMap = function () {
     polygon.getPath().addListener('set_at', searchWithinPolygon);
     polygon.getPath().addListener('insert_at', searchWithinPolygon);
   });
-}
+};
 
 // polygon <-> markers --- Iterate over markers
 function searchWithinPolygon(polygon, locations) {

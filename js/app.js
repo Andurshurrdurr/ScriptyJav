@@ -38,11 +38,11 @@ $.getJSON(giphyurl)
 var makeContent = function (location) {
   // Get a random gif from our giphy api call
   var gifcontent = "";
-  if (gifs) { 
+  if (gifs) {
     var gifnum = Math.round(Math.random() * (numGifs - 1));
     var gifsrc = (gifs[0] === undefined) ? '' : gifs[gifnum].embed_url;
     gifcontent = '<div class="infoContent" style="text-align: center;"><i>'+
-    '(The gif is just for fun &#9786;)</i></div><iframe src="' + 
+    '(The gif is just for fun &#9786;)</i></div><iframe src="' +
     gifsrc + '" alt="GIFFF" frameBorder="0"></iframe>';
   } else {
     gifcontent = '<div class="infoContent" style="text-align: center;"><i>' +
@@ -112,12 +112,11 @@ var Location = function (location, loclist, marker = '') {
       var err = textStatus + ", " + error;
       console.log( "Foursqure request failed: " + err );
       // alert("Foursquare api request failed.  No data on locations.");
-      self.foursquareError("A failure occured in loading Foursquare data :(")
+      self.foursquareError("A failure occured in loading Foursquare data :(");
   })
   .always(function(){
     // always make the infowindow and marker for google maps
     self.infoWindow = new google.maps.InfoWindow({content: makeContent(self)});
-    
   });
   
   self.marker = new google.maps.Marker({
@@ -170,8 +169,8 @@ var ViewModel = function () {
 
   // initialize location markers and push them to the locationlist obs array
   locations.forEach(function (location) {
-		self.locationList.push(new Location(location, self.locationList));
-	});
+    self.locationList.push(new Location(location, self.locationList));
+  });
 
   // init locations for startlocation
   var marker = 'https://cdn1.iconfinder.com/data/icons/instagram-ui-glyph/48/Sed-09-128.png';
@@ -187,7 +186,7 @@ var ViewModel = function () {
       // Shorthand for loop to set locations visible
       for (var i in drawingManager.searchLocs) {
         if (drawingManager.searchLocs[i]){
-        	drawingManager.searchLocs[i].inPolygon(true);
+          drawingManager.searchLocs[i].inPolygon(true);
         }
       }
     } else {
@@ -252,13 +251,13 @@ var ViewModel = function () {
     // Next we use the ko.utils.arrayFilter function and return the result
     return ko.utils.arrayFilter(self.locationList(), function(location) {
       // if drawingmanager enabled we check if visible is false, else its inactive
-    	var title = location.title.toLowerCase();
-    	var result = (title.search(filter) >= 0);
+      var title = location.title.toLowerCase();
+      var result = (title.search(filter) >= 0);
       if (location.inPolygon() === false) {
         result = false;
       }
       location.visible(result);
-    	return result;
+      return result;
     });
   }, self);
 };

@@ -264,9 +264,14 @@ var ViewModel = function () {
   }, self);
 };
 
+function initKnockout () {
+  ko.applyBindings(new ViewModel());
+}
+
 // Callback for loading the google api
 function initApp () {
-  ko.applyBindings(new ViewModel());
+  initKnockout();
+  initMap();
 }
 
 // This is an errorhandler called if loading the google api fails

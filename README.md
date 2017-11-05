@@ -20,7 +20,13 @@ Getting a local devenvironment running on your machine
 
 #### Instructions
 1. Clone this repository and open the index.html file in your browser
-2. You can now edit the code using your favorite texteditor / devenv
+2. You may experience issues/errors with this approach, in which case you should serve the files from the local server
+3. You may also examine the running demo (see below)
+4. In the cloned repo you can now edit the code using your favorite texteditor / devenv
+
+#### Known issues
+- Disqus will probably not work locally due to the disqus api expecting the requests to come from the "peakbreaker.com" domain
+- Due to this, the disqus scripts may throw wierd errors.  You can comment out the disqus api script in the index.html to 
 
 #### Demo
  See a running demo of this app on my website:

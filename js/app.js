@@ -21,30 +21,39 @@ var numGifs = 25;
 var giphyurl = 'https://api.giphy.com/v1/gifs/search?api_key=1d34a409c28f4202a1c4cf94dbd4676b&q=NewYork&limit=' +
                 numGifs + '&offset=0&rating=G&lang=en';
 var gifs = [];
+var giphyError = "";
 
 $.getJSON(giphyurl)
   .done(function (data) {
     gifs = data.data;
-    console.log(gifs);
   })
   .fail(function(jqxhr, textStatus, error){
     var err = textStatus + ", " + error;
     console.log("Giphy request failed : " + err);
-    alert("Giphy API request failed. No Gifs! :'(");
+    // alert("Giphy API request failed");
+    gifs = false;
   });
 
 // Helperfunction for creating text for the infowindow
 var makeContent = function (location) {
   // Get a random gif from our giphy api call
-  var gifnum = Math.round(Math.random() * (numGifs - 1));
-  var gifsrc = (gifs[0] === undefined) ? '' : gifs[gifnum].embed_url;
+  var gifcontent = "";
+  if (gifs) { 
+    var gifnum = Math.round(Math.random() * (numGifs - 1));
+    var gifsrc = (gifs[0] === undefined) ? '' : gifs[gifnum].embed_url;
+    gifcontent = '<div class="infoContent" style="text-align: center;"><i>'+
+    '(The gif is just for fun &#9786;)</i></div><iframe src="' + 
+    gifsrc + '" alt="GIFFF" frameBorder="0"></iframe>';
+  } else {
+    gifcontent = '<div class="infoContent" style="text-align: center;"><i>' +
+    'A failure occured in loading the fun gifs :(</i>';
+  }
   // First we format the content to html
   var content = '<div class="infoWindow"><h3>' + location.title + '</h3>' +
-  '<div class="infoContent" style="text-align: center;"><i>(The gif is just for fun &#9786;)</i></div>' +
-  '<iframe src="'+ gifsrc + '" alt="GIFFF" frameBorder="0"></iframe>' +
-  '<div class="infoContent">' + location.website() + '</div>' +
+  gifcontent + '<div class="infoContent">' + location.website() + '</div>' +
   '<div class="infoContent">' + location.address() + '</div>' +
-  '<div class="infoContent">' + location.phone() + '</div></div>';
+  '<div class="infoContent">' + location.phone() + '</div>'
+  + '<div class="infoContent">' + location.foursquareError() + '</div></div>';
   // And return the content
   return content;
 };
@@ -69,11 +78,11 @@ var Location = function (location, loclist, marker = '') {
   self.title = location.title;
   self.lat = location.location.lat;
   self.lng = location.location.lng;
-
   // And sets some empty values we will fill with API requests
   self.website = ko.observable('No website');
   self.address = ko.observable('No formatted address');
   self.phone = ko.observable('No phone number');
+  self.foursquareError = ko.observable('');
   // And observable to toggle the location and dropdown visible
   self.visible = ko.observable(true);
   self.inPolygon = ko.observable(true);
@@ -96,19 +105,21 @@ var Location = function (location, loclist, marker = '') {
         self.website(response.url ? response.url : 'No website');
         self.address(response.formattedAddress ? response.formattedAddress[0] : 'No formatted address');
         self.phone(response.contact.formattedPhone ? response.contact.formattedPhone : 'No phone number');
-      }      
+      }
     })
     // And finally an error handler if our request fails
     .fail(function( jqxhr, textStatus, error ) {
       var err = textStatus + ", " + error;
-      console.log( "Request Failed: " + err );
-      alert("Foursquare api request failed.  No data on locations.");
+      console.log( "Foursqure request failed: " + err );
+      // alert("Foursquare api request failed.  No data on locations.");
+      self.foursquareError("A failure occured in loading Foursquare data :(")
   })
   .always(function(){
     // always make the infowindow and marker for google maps
     self.infoWindow = new google.maps.InfoWindow({content: makeContent(self)});
+    
   });
-
+  
   self.marker = new google.maps.Marker({
     map: map,
     title: self.title,
@@ -139,19 +150,7 @@ var Location = function (location, loclist, marker = '') {
   });
 };
 
-// Function to give us the current & previousValue in a subscription
-
-ko.subscribable.fn.subscribeChanged = function (callback) {
-  var previousValue;
-  this.subscribe(function (_previousValue) {
-      previousValue = _previousValue;
-  }, undefined, 'beforeChange');
-  this.subscribe(function (latestValue) {
-      callback(latestValue, previousValue);
-  });
-};
-
-// This is our viewmodel--------------------------------------------------------
+// This is our viewmodel -------------------------------------------------------
 var ViewModel = function () {
   // First we set the self variable
   var self = this;

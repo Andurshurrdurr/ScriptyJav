@@ -57,7 +57,7 @@ function searchWithinPolygon(polygon, locations) {
 
 function calculateAndDisplayRoute(viewmodel) {
   var origin = viewmodel.selectedStart();
-  console.log(origin);
+  // console.log(origin);
   var dest = origin;
   var waypts = [];
   viewmodel.filteredLocations().forEach(function(loc){
@@ -78,7 +78,7 @@ function calculateAndDisplayRoute(viewmodel) {
   }, function(response, status) {
     if (status === 'OK') {
       // And display the results
-      console.log(response);
+      // console.log(response);
       directionsDisplay.setDirections(response);
       var route = response.routes[0];
     } else {

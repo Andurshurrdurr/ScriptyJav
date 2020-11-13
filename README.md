@@ -31,7 +31,7 @@ Getting a local devenvironment running on your machine
 
 #### Demo
  See a running demo of this app on my website:
- http://peakbreaker.com/ScriptyJav
+ http://pages.peakbreaker.com/ScriptyJav
 
 ## LICENSE
 The MIT License (MIT)
